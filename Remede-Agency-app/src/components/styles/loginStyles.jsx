@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+
 export const Main = styled.main`
   display: flex;
   justify-content: center;
@@ -79,4 +80,11 @@ export const SignInButton = styled.a`
   &:hover {
     background-color: var(--accent-hover-color);
   }
+`;
+
+// New styles for error messages
+export const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
 `;
