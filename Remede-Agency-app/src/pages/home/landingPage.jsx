@@ -1,4 +1,4 @@
-import GlobalStyles from '../styles/globalStyles';
+import GlobalStyles from '../../components/styles/globalStyles';
 import {
   Main,
   Hero,
@@ -9,7 +9,7 @@ import {
   FeatureItem,
   FeatureIcon,
   FeatureItemTitle,
-} from '../styles/landingPageStyles';
+} from '../../components/styles/landingPageStyles';
 
 
 

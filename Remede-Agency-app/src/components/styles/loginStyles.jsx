@@ -62,7 +62,7 @@ export const RememberLabel = styled.label`
   font-size: 1rem;
 `;
 
-export const SignInButton = styled.a`
+export const SignInButton = styled.button`
   display: block;
   width: 100%;
   padding: 8px;

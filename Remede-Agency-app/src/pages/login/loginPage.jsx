@@ -4,11 +4,11 @@ import {
     SignInContent,
     SignInIcon,
     
-  } from '../styles/loginStyles';
+  } from '../../components/styles/loginStyles';
 
-  import GlobalStyles from '../styles/globalStyles';
+  import GlobalStyles from '../../components/styles/globalStyles';
 
-  import SignIn from '../common/signIn/signInForm'
+  import SignIn from '../login/signInForm'
   
   const LoginPage = () => {
     return (
