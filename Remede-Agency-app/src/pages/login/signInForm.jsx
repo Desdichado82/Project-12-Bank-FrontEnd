@@ -1,8 +1,9 @@
 // SignIn.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { LoginAction } from '../../redux/actions/authActions'; // Define your login action
+import { login } from '../../redux/actions/authActions';
 import authService from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
 import {
   SignInForm,
   InputWrapper,
@@ -17,8 +18,10 @@ import {
 
 const SignIn = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
@@ -36,45 +39,50 @@ const SignIn = () => {
   };
 
   const handlePasswordBlur = () => {
-    setPasswordError(validatePassword(password) ? '' : 'Password must be at least 6 characters long.');
+    setPasswordError(validatePassword(password) ? '' : 'Password must be at least 8 characters long.');
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  console.log('Form submitted!');
-  // Reset validation errors
-  setEmailError('');
-  setPasswordError('');
+    e.preventDefault();
 
-  // Validate email
-  if (!validateEmail(email)) {
-    setEmailError('Please enter a valid email address.');
-    return;
-  }
+    setEmailError('');
+    setPasswordError('');
 
-  // Validate password
-  if (!validatePassword(password)) {
-    setPasswordError('Password must be at least 6 characters long.');
-    return;
-  }
-
-  // Log email and password before making the API call
-  console.log('Logging in with email:', email, 'and password:', password);
-  
-  try {
-    const data = await authService.login({ email, password });
-    dispatch(LoginAction(data.user, data.token));
-    console.log('Login Success:', data);
-    // Redirect to profile page or any other route upon successful login
-  } catch (error) {
-    console.error('Login failed', error);
-    if (error.response) {
-      setEmailError('Invalid credentials. Please check your email and password.');
-    } else {
-      setEmailError('An error occurred while trying to log in. Please try again.');
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address.');
+      return;
     }
-  }
-};
+
+    if (!validatePassword(password)) {
+      setPasswordError('Password must be at least 8 characters long.');
+      return;
+    }
+    try {
+      console.log('Attempting to log in with:', email, password);
+  
+      const data = await authService.login({ email, password });
+  
+      console.log('Login API response data:', data);
+  
+      if (data && data.body && data.body.token) {
+        console.log('Login successful. User data:', data.body);
+        dispatch(login(data.body.user, data.body.token));
+        localStorage.setItem('token', data.body.token);
+        navigate('/profile');
+      } else {
+        console.error('Login failed. No token received.');
+      }
+    } catch (error) {
+      console.error('Login failed due to an error:', error);
+    }
+  };
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setRememberMe(true);
+    }
+  }, []);
 
   return (
     <SignInForm onSubmit={handleLogin}>
@@ -102,11 +110,15 @@ const SignIn = () => {
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
       </InputWrapper>
 
-      {/* Move the error messages to below the inputs */}
       <SignInButton type="submit">Sign In</SignInButton>
 
       <InputRemember>
-        <RememberCheckbox type="checkbox" id="remember-me" />
+        <RememberCheckbox
+          type="checkbox"
+          id="remember-me"
+          checked={rememberMe}
+          onChange={() => setRememberMe(!rememberMe)}
+        />
         <RememberLabel htmlFor="remember-me">Remember me</RememberLabel>
       </InputRemember>
     </SignInForm>
@@ -114,5 +126,7 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
+
 
 

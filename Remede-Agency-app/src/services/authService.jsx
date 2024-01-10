@@ -1,19 +1,29 @@
-// services/authService.js
+// authService.jsx
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001';
-
 const authService = {
-  login: async ({ email, password }) => {
+  login: async (credentials) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/user/login`, { email, password });
-      console.log('Login API Response:', response);
-      return response.data;
+      console.log('Making login API request with credentials:', credentials);
+
+      const response = await axios.post('http://localhost:3001/api/v1/user/login', credentials);
+      const data = response.data;
+
+      console.log('Login API response:', response);
+
+      if (response.status === 200) {
+        return data;
+      } else {
+        throw new Error(data.message || 'Login failed');
+      }
     } catch (error) {
-      console.error('Error in login:', error);
+      console.error('Login API request failed:', error);
       throw error;
     }
   },
 };
 
 export default authService;
+
+
+
