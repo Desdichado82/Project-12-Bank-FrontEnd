@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-const GlobalStyles = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
 /* Reset styles */
 :root {
   --font-family: 'Avenir', 'Helvetica', 'Arial', sans-serif;
@@ -46,6 +46,10 @@ body {
   background-color: #12002b;
 }
 
+.bg-grey{
+  background-color:#D3D3D3
+}
+
 `;
 
-export default GlobalStyles;
+export default GlobalStyle;

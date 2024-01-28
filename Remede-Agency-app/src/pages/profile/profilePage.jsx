@@ -1,43 +1,39 @@
-import GlobalStyles from '../../components/styles/globalStyles';
-import {
-  ProfileContainer,
-  Header,
-  WelcomeText,
-  EditButton,
-  AccountSection,
-  AccountContentWrapper,
-  AccountTitle,
-  AccountAmount,
-  AccountAmountDescription,
-  TransactionButton,
-} from '../../components/styles/profileStyles';
+// ProfilePage.js
+import { useSelector } from 'react-redux';
+import { Header, EditButton, Main } from './ProfileStyles';
+import Accounts from './ProfileAccounts';
+import { useNavigate } from 'react-router-dom';
+
+const ProfilePage = () => {
+
+  const navigate = useNavigate();
+  const userProfile = useSelector((state) => state.auth.userProfile.body);
 
 
+  const redirectToEditUser = () => {
+    // Assuming your edit user page route is '/edit-user'
+    navigate('/editUser');
+  };
+ 
+  
 
+  console.log('User Profile:', userProfile);
 
+  // Log when the component is rendered
+  console.log('ProfilePage rendered');
 
-const ProfilePage = ({ firstName }) => {
   return (
-    <ProfileContainer>
-      <GlobalStyles/>
+    <Main className="main bg-dark">
       <Header>
-        <WelcomeText>Welcome back<br />{firstName}!</WelcomeText>
-        <EditButton>Edit Name</EditButton>
+        <h1>Welcome back<br />{userProfile.firstName} {userProfile.lastName}!</h1>
+        <EditButton onClick={redirectToEditUser}>Edit Name</EditButton>
       </Header>
       <h2 className="sr-only">Accounts</h2>
-      <AccountSection>
-        <AccountContentWrapper>
-          <AccountTitle>Argent Bank Checking (x8349)</AccountTitle>
-          <AccountAmount>$2,082.79</AccountAmount>
-          <AccountAmountDescription>Available Balance</AccountAmountDescription>
-        </AccountContentWrapper>
-        <AccountContentWrapper className="cta">
-          <TransactionButton>View transactions</TransactionButton>
-        </AccountContentWrapper>
-      </AccountSection>
-      {/* Repeat similar sections for Savings and Credit Card accounts */}
-    </ProfileContainer>
+      <Accounts />
+    </Main>
   );
 };
 
 export default ProfilePage;
+
+

@@ -1,6 +1,8 @@
-import { FooterContainer, FooterText } from '../styles/footerStyles';
+// Footer.js
 
- const Footer = () => {
+import { FooterContainer, FooterText } from './FooterStyles';
+
+const Footer = () => {
   return (
     <FooterContainer>
       <FooterText>Copyright 2020 Argent Bank</FooterText>

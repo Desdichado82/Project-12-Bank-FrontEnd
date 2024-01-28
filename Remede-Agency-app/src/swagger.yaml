@@ -1,0 +1,112 @@
+swagger: "2.0"
+info:
+  title: Bank Argent Transactions API documentation
+  description: Contains all available API endpoints for transactions
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /user/transactions:
+    get:
+      tags:
+        - User Module
+      summary: Get all transactions for the current month
+      description: Retrieve a list of all transactions grouped by account for the current month.
+      parameters:
+        - name: month
+          in: query
+          description: The month for which transactions should be retrieved (optional, default is the current month)
+          type: integer
+          format: month
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: "#/components/schemas/TransactionList"
+        '404':
+          description: No transactions found
+
+    put:
+      tags:
+        - User Module
+      summary: Update a transaction
+      description: Update information about a specific transaction.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction to update
+          required: true
+          type: string
+        - name: updatedInfo
+          in: body
+          description: Updated information about the transaction
+          required: true
+          schema:
+            $ref: "#/components/schemas/Transaction"
+      responses:
+        '204':
+          description: Transaction updated successfully
+        '404':
+          description: Transaction not found
+      security:
+        - Bearer: []
+
+    delete:
+      tags:
+        - User Module
+      summary: Delete a transaction
+      description: Remove a specific transaction from the records.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction to delete
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Transaction deleted successfully
+        '404':
+          description: Transaction not found
+      security:
+        - Bearer: []
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+
+components:
+  schemas:
+    TransactionList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Transaction"
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Transaction ID
+        accountNumber:
+          type: string
+          description: Account number associated with the transaction
+        amount:
+          type: number
+          description: Transaction amount
+        date:
+          type: string
+          format: date
+          description: Transaction date
+        description:
+          type: string
+          description: Transaction description
+        # Add other transaction properties here as needed

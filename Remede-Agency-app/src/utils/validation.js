@@ -1,24 +1,11 @@
-const validateEmail = (email) => {
+export const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(value);
   };
-  
-  const validatePassword = (password) => {
-    return password.trim() !== '';
+
+  export const validatePassword = (value) => {
+    return value.length >= 8;
   };
+
+
   
-  const validateForm = (username, password) => {
-    const errors = {};
-  
-    if (!validateEmail(username)) {
-      errors.username = 'Please enter a valid email address.';
-    }
-  
-    if (!validatePassword(password)) {
-      errors.password = 'Please enter your password.';
-    }
-  
-    return errors;
-  };
-  
-  export default validateForm;

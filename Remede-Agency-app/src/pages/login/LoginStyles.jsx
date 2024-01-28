@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 export const Main = styled.main`
@@ -16,8 +17,7 @@ export const SignInContent = styled.section`
   margin: 0 auto;
   margin-top: 3rem;
   padding: 2rem;
-  max-width: 400px;
-  border-radius: 8px;
+  max-width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
@@ -39,8 +39,21 @@ export const InputWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
+export const FormRow = styled.div`
+  display: flex;
+  flex-direction: row;
+   justify-content: center;
+  margin-bottom: 1rem;
+  gap:1rem;
+`;
+
 export const Label = styled.label`
   font-weight: bold;
+`;
+
+export const EditLabel = styled.label`
+  font-weight: bold;
+  color:#2c3e50;
 `;
 
 export const Input = styled.input`
@@ -79,6 +92,7 @@ export const SignInButton = styled.button`
 
   &:hover {
     background-color: var(--accent-hover-color);
+    color:var(--accent-color);
   }
 `;
 
@@ -87,4 +101,9 @@ export const ErrorMessage = styled.p`
   color: red;
   margin-top: 5px;
   font-size: 14px;
+`;
+
+export const StyledFontAwesomeIcon = styled(FontAwesomeIcon)`
+  font-size: 1.5rem;
+  cursor: pointer;
 `;

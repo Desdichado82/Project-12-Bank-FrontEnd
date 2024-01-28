@@ -1,4 +1,4 @@
-import GlobalStyles from '../../components/styles/globalStyles';
+import GlobalStyle from '../../components/styles/globalStyles';
 import {
   Main,
   Hero,
@@ -9,7 +9,8 @@ import {
   FeatureItem,
   FeatureIcon,
   FeatureItemTitle,
-} from '../../components/styles/landingPageStyles';
+} from '../Home/LandingStyles';
+
 
 
 
@@ -21,7 +22,7 @@ import securityIcon from '../../assets/img/icon-security.png';
 const LandingPage = () => {
   return (
     <Main>
-      <GlobalStyles />
+      <GlobalStyle />
       <Hero>
         <HeroContent>
           <h2 className="sr-only">Promoted Content</h2>

@@ -1,30 +1,31 @@
+// LoginPage.js
+import { useEffect } from 'react';
+import {Main, SignInContent,StyledFontAwesomeIcon  } from './LoginStyles';
+import LoginForm from './LoginForm';
+import { useSelector } from 'react-redux';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import {useNavigate} from 'react-router-dom';
 
-import {
-    Main,
-    SignInContent,
-    SignInIcon,
-    
-  } from '../../components/styles/loginStyles';
+const LoginPage = () => {
 
-  import GlobalStyles from '../../components/styles/globalStyles';
+  const userProfile = useSelector((state) => state.auth.userProfile);
+  const navigate = useNavigate();
 
-  import SignIn from '../login/signInForm'
-  
-  const LoginPage = () => {
-    return (
-        
-      <Main >
-         <GlobalStyles />
-        <SignInContent>
-          <SignInIcon className="fa fa-user-circle"></SignInIcon>
-          <h1>Sign In</h1>
-          <SignIn/>
-            
-          
-        </SignInContent>
-      </Main>
-    );
-  };
-  
-  export default LoginPage;
-  
+  useEffect(() => {
+    if (userProfile) {
+      navigate('/profile'); // Redirect to the profile page
+    }
+  }, [userProfile, navigate]);
+
+  return (
+    <Main className="main bg-dark">
+      <SignInContent>
+        <StyledFontAwesomeIcon className="fa fa-user-circle" icon={faUserCircle} />
+        <h1>Sign In</h1>
+        <LoginForm />
+      </SignInContent>
+    </Main>
+  );
+};
+
+export default LoginPage;
