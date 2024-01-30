@@ -1,7 +1,7 @@
 // LoginPage.js
 import { useEffect } from 'react';
-import {Main, SignInContent,StyledFontAwesomeIcon  } from './LoginStyles';
-import LoginForm from './LoginForm';
+import {Main, SignInContent,StyledFontAwesomeIcon  } from '../Login/LoginStyles';
+import LoginForm from '../Login/LoginForm';
 import { useSelector } from 'react-redux';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import {useNavigate} from 'react-router-dom';

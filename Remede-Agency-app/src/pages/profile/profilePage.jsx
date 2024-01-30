@@ -1,7 +1,7 @@
 // ProfilePage.js
 import { useSelector } from 'react-redux';
-import { Header, EditButton, Main } from './ProfileStyles';
-import Accounts from './ProfileAccounts';
+import { Header, EditButton, Main } from '../Profile/ProfileStyles';
+import Accounts from '../Profile/ProfileAccounts';
 import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {

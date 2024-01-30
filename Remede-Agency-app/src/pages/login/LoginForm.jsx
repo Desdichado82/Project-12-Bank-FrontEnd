@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { loginUser } from '../../redux/auth/authThunks';
 import { SignInForm, InputWrapper, InputRemember, RememberCheckbox, RememberLabel, SignInButton, Label, Input, ErrorMessage } from './LoginStyles';
 import {validateEmail,validatePassword} from '../../utils/validation'
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const errorMessage = useSelector((state) => state.auth.error); // Get error message from Redux store
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -46,6 +47,7 @@ const LoginForm = () => {
 
   return (
     <SignInForm onSubmit={handleLogin}>
+       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* Display error message */}
       <InputWrapper>
         <Label htmlFor="email">Username</Label>
         <Input
