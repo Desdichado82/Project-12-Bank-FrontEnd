@@ -78,6 +78,64 @@ paths:
       security:
         - Bearer: []
 
+  /user/transactions/{transactionId}/category:
+    put:
+      tags:
+        - User Module
+      summary: Add category to transaction
+      description: Add a category to a specific transaction.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction to update
+          required: true
+          type: string
+        - name: category
+          in: body
+          description: Category to be added to the transaction
+          required: true
+          schema:
+            type: object
+            properties:
+              category:
+                type: string
+      responses:
+        '204':
+          description: Category added to transaction successfully
+        '404':
+          description: Transaction not found
+      security:
+        - Bearer: []
+
+  /user/transactions/{transactionId}/note:
+    put:
+      tags:
+        - User Module
+      summary: Add note to transaction
+      description: Add a note to a specific transaction.
+      parameters:
+        - name: transactionId
+          in: path
+          description: ID of the transaction to update
+          required: true
+          type: string
+        - name: note
+          in: body
+          description: Note to be added to the transaction
+          required: true
+          schema:
+            type: object
+            properties:
+              note:
+                type: string
+      responses:
+        '204':
+          description: Note added to transaction successfully
+        '404':
+          description: Transaction not found
+      security:
+        - Bearer: []
+
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -109,4 +167,10 @@ components:
         description:
           type: string
           description: Transaction description
+        category:  # New property for transaction category
+          type: string
+          description: Transaction category
+        note:  # New property for transaction note
+          type: string
+          description: Transaction note
         # Add other transaction properties here as needed
