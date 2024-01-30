@@ -15,12 +15,7 @@ const ProfilePage = () => {
     navigate('/editUser');
   };
  
-  
 
-  console.log('User Profile:', userProfile);
-
-  // Log when the component is rendered
-  console.log('ProfilePage rendered');
 
   return (
     <Main className="main bg-dark">

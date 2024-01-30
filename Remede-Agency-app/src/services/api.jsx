@@ -1,54 +1,54 @@
-// authApi.js
-import axios from 'axios';
-import accounts from '../data/mockAccounts'; // Update the path as needed
+// Import necessary modules
+import axios from 'axios'; // Axios for making HTTP requests
+import accounts from '../data/mockAccounts'; // Mock account data
 
+// Define the base URL for the API
 const API_URL = 'http://localhost:3001/api/v1/user';
 
+// Define the login function
 export const login = async (credentials) => {
   try {
-    console.log('Attempting to log in with credentials:', credentials);
+    // Attempt to log in with the provided credentials
     const response = await axios.post(`${API_URL}/login`, credentials);
-    console.log('Received response from login API:', response.data);
+    // Return the response data
     return response.data;
   } catch (error) {
-    console.error('Login failed with error:', error.response.data);
+    // If an error occurs, throw the error data
     throw error.response.data;
   }
 };
 
+// Define the getUserProfile function
 export const getUserProfile = async (token) => {
   try {
-    console.log('Making API call to get user profile...');
+    // Make an API call to get the user profile
     const response = await axios.post(`${API_URL}/profile`, {}, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log('API call succeeded. Data:', response.data);
+    // Return the response data
     return response.data;
   } catch (error) {
-    console.error('API call failed. Reason:', error.response ? error.response.data : error.message);
+    // If an error occurs, throw the error data or message
     throw error.response ? error.response.data : error;
   }
 };
 
-
-// New function to get account data based on the user's email
+// Define the getAccountData function
 export const getAccountData = (email) => {
-  console.log('Attempting to get account data for email:', email);
+  // Find the user accounts for the provided email
   const userAccounts = accounts.find((user) => user.email === email);
-  console.log('Found user accounts:', userAccounts);
+  // Get the account data or an empty array if no accounts were found
   const accountData = userAccounts ? userAccounts.accounts : [];
-  console.log('Returning account data:', accountData);
+  // Return the account data
   return accountData;
 };
 
-
-
+// Define the updateUserProfile function
 export const updateUserProfile = async (token, updatedUserData) => {
   try {
-    console.log( 'token & userData', token, updatedUserData);
-    
+    // Make an API call to update the user profile
     const response = await axios.put(
       `${API_URL}/profile`,
       updatedUserData,
@@ -58,12 +58,10 @@ export const updateUserProfile = async (token, updatedUserData) => {
         },
       }
     );
-
+    // Return the response data
     return response.data;
   } catch (error) {
-    console.error('Error updating user profile:', error.response ? error.response.data : error.message);
+    // If an error occurs, throw the error data or message
     throw error.response ? error.response.data : error;
   }
 }
-
-

@@ -1,25 +1,25 @@
-// authThunks.js
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { updateUserProfile } from '../../services/api';
+// Import necessary modules and functions
+import { createAsyncThunk } from '@reduxjs/toolkit'; // Redux Toolkit function for generating async thunks
+import { updateUserProfile } from '../../services/api'; // API function for updating the user profile
 
+// Define the updateUser async action
 export const updateUser = createAsyncThunk(
-  'user/updateUserProfile',
+  'user/updateUserProfile', // The action type
+  // The payload creator function
   async ({ updatedUserData, token }, { rejectWithValue }) => {
-    console.log('updateUser called with:', { updatedUserData, token });
+    // Attempt to update the user profile with the provided data and token
     try {
       const response = await updateUserProfile(token, updatedUserData);
-      console.log('Response from updateUserProfile:', response);
+      // If the response status is 200, return the response body
       if (response.status === 200) {
-        console.log('updateUserProfile succeeded with status 200');
         return response.body;
       } else {
-        console.log('updateUserProfile failed with status:', response.status);
+        // If the response status is not 200, reject the promise with the response message
         return rejectWithValue(response.message);
       }
     } catch (error) {
-      console.error('Error in updateUser:', error);
+      // If an error occurs, reject the promise with the error message
       return rejectWithValue(error.message);
     }
   }
 );
-

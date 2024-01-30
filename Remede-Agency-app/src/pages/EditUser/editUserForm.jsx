@@ -7,26 +7,26 @@ import {useNavigate} from 'react-router-dom';
 import{updateUser} from '../../redux/edit/userThunk';
 
 import {  SaveButton, CancelButton } from '../Profile/ProfileStyles';
-import { SignInForm, InputWrapper,  EditLabel ,Input,FormRow} from '../Login/LoginStyles';
+import { SignInForm, InputWrapper,  EditLabel ,Input,FormRow, ErrorMessage} from '../Login/LoginStyles';
 const EditUserForm = () => {
   // Add logic for handling form submissions and cancellations
   const userProfile = useSelector((state) => state.auth.userProfile.body);
+  const errorMessage = useSelector((state) => state.user.error); // Get error message from Redux store
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
-  console.log('Initial state:', { firstName, lastName });
 
   // Access the JWT token from the state
   const token = useSelector((state) => state.auth.token);
    // Separate the token from the updated user data
    const updatedUserData = { firstName, lastName };
-  console.log("token value retrieved:", token);
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  console.log('Form submitted with:', updatedUserData, token);
+
   dispatch(updateUser({updatedUserData, token}));
 
    // After updating the user, fetch the updated user profile
@@ -38,6 +38,7 @@ const EditUserForm = () => {
   };
   return (
     <SignInForm onSubmit={handleSubmit}>
+         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* Display error message */}
       <FormRow>
       <InputWrapper>
       <EditLabel>First Name :</EditLabel>

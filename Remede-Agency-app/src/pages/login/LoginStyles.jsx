@@ -45,6 +45,9 @@ export const FormRow = styled.div`
    justify-content: center;
   margin-bottom: 1rem;
   gap:1rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const Label = styled.label`

@@ -1,59 +1,51 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { login, getUserProfile,getAccountData } from '../../services/api';
-import { loginSuccess, loginFailure } from './authSlice';
+// Import necessary modules and functions
+import { createAsyncThunk } from '@reduxjs/toolkit'; // Redux Toolkit function for generating async thunks
+import { login, getUserProfile,getAccountData } from '../../services/api'; // API functions for logging in and getting user profile
+import { loginSuccess, loginFailure } from './authSlice'; // Actions from the auth slice
 
-
-
+// Define the loginUser async action
 export const loginUser = (credentials, rememberMe) => async (dispatch) => {
   try {
-    console.log('Attempting to log in with credentials:', credentials);
+    // Attempt to log in with the provided credentials
     const response = await login(credentials);
-    console.log('Received response from login API:', response);
 
-    // Dispatch login success action
+    // Dispatch the loginSuccess action with the response body
     dispatch(loginSuccess(response.body));
+
     // Store the token securely if "Remember Me" is checked
     storeToken(response.body.token, rememberMe);
-    // Fetch user profile and handle redirection
-    await dispatch(fetchUserProfile(response.body.token));
-    
 
+    // Fetch the user profile using the token
+    await dispatch(fetchUserProfile(response.body.token));
   } catch (error) {
-    console.error('Login failed with error:', error);
+    // If an error occurs, dispatch the loginFailure action with the error message
     dispatch(loginFailure(error.message));
   }
 };
 
-// Function to store the token securely
+// Define a function to store the token securely
 const storeToken = (token, rememberMe) => {
   if (rememberMe) {
-    // Use a secure method to store the token (e.g., secure cookies)
-    // Example: document.cookie = `token=${token}; secure; SameSite=Strict;`;
-    localStorage.setItem('token', token); // or sessionStorage
+    // Store the token in local storage if "Remember Me" is checked
+    localStorage.setItem('token', token);
   }
 };
 
+// Define the fetchUserProfile async action
 export const fetchUserProfile = createAsyncThunk(
   'auth/fetchUserProfile',
   async (token, { rejectWithValue, dispatch }) => {
     try {
-      console.log('Fetching user profile with token:', token);
-
+      // Fetch the user profile using the token
       const userProfile = await getUserProfile(token);
-      console.log('Received user profile:', userProfile);
+
+      // Fetch the account data using the user's email
       const accountData =  getAccountData(userProfile.body.email);
-      console.log('accountData',accountData);
 
-    
-
-      dispatch(loginSuccess({ userProfile, accountData })); // Dispatch the user profile to the reducer
-      console.log('Dispatched loginSuccess action with user profile:', userProfile);
-
-      
+      // Dispatch the loginSuccess action with the user profile and account data
+      dispatch(loginSuccess({ userProfile, accountData }));
     } catch (error) {
-      console.error('Error fetching user profile:', error.message);
-
-      // Use rejectWithValue to provide error details to the reducer
+      // If an error occurs, reject the promise with the error message
       return rejectWithValue(error.message);
     }
   }

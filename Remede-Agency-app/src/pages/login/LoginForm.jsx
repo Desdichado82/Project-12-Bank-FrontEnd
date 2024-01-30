@@ -19,7 +19,7 @@ const LoginForm = () => {
   };
 
   const handlePasswordBlur = () => {
-    setPasswordError(validatePassword(password) ? '' : 'Password must be at least 8 characters long.');
+    setPasswordError(validatePassword(password) ? '' : 'Please enter a valid Password.');
   };
 
   const handleLogin = (event) => {

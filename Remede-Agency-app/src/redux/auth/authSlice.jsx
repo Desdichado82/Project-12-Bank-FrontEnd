@@ -1,14 +1,13 @@
 // authSlice.js
-import { createSlice } from '@reduxjs/toolkit';
-import { storeToken, clearToken } from '../../utils/authUtils'; // Adjust the path based on your actual file structure
 
+// Import necessary modules and functions
+import { createSlice } from '@reduxjs/toolkit'; // Redux Toolkit function for generating a slice of the Redux store
+import { storeToken, clearToken } from '../../utils/authUtils'; // Utility functions for storing and clearing the auth token
 
-
-
-
+// Define the auth slice of the Redux store
 const authSlice = createSlice({
-  name: 'auth',
-  initialState: {
+  name: 'auth', // The name of the slice
+  initialState: { // The initial state of the slice
     user: null,
     token: null,
     userProfile: null,
@@ -16,8 +15,8 @@ const authSlice = createSlice({
     error: null,
     isAuth: false, // Assuming you have an isAuth property to track authentication status
   },
-  reducers: {
-    loginSuccess: (state, action) => {
+  reducers: { // The reducers for this slice
+    loginSuccess: (state, action) => { // Reducer for successful login
       state.user = action.payload.user || state.user;
       state.token = action.payload.token || state.token;
       state.userProfile = action.payload.userProfile;
@@ -27,7 +26,7 @@ const authSlice = createSlice({
       // Store the token securely
       storeToken(action.payload.token, action.payload.rememberMe);
     },
-    loginFailure: (state, action) => {
+    loginFailure: (state, action) => { // Reducer for failed login
       state.user = null;
       state.token = null;
       state.userProfile = null;
@@ -35,7 +34,7 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.isAuth = false; // Set isAuth to false on login failure
     },
-    logout: (state) => {
+    logout: (state) => { // Reducer for logout
       state.user = null;
       state.token = null;
       state.userProfile = null;
@@ -45,20 +44,15 @@ const authSlice = createSlice({
        // Clear the stored token on logout
        clearToken();
     },
-    setAuthenticatedUser: (state) => {
+    setAuthenticatedUser: (state) => { // Reducer for setting the authenticated user
       // Set the user as authenticated, e.g., update isAuth property
       state.isAuth = true;
     },
   },
 });
 
+// Export the actions for this slice
 export const { loginSuccess, loginFailure, logout } = authSlice.actions;
 
-
-
-
-
-
-
+// Export the reducer for this slice
 export default authSlice.reducer;
-
