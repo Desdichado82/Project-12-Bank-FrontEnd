@@ -1,176 +1,194 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  title: Bank Argent Transactions API documentation
-  description: Contains all available API endpoints for transactions
-  version: "1.0.0"
-  termsOfService: "http://swagger.io/terms/"
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
 host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
 paths:
-  /user/transactions:
+  /user/transactions/{accountNumber}:
     get:
       tags:
-        - User Module
-      summary: Get all transactions for the current month
-      description: Retrieve a list of all transactions grouped by account for the current month.
+        - Transaction Module
+      summary: Get Transactions
+      description: Retrieve all transactions for the specified account for the current month
       parameters:
-        - name: month
-          in: query
-          description: The month for which transactions should be retrieved (optional, default is the current month)
-          type: integer
-          format: month
         - in: header
           name: Authorization
           description: Attach Bearer JWT token
           required: true
           type: string
+        - in: path
+          name: accountNumber
+          description: Account number for which transactions are requested
+          required: true
+          type: string
+      produces:
+        - application/json
       responses:
         '200':
-          description: Successful response
+          description: Transactions retrieved successfully
           schema:
-            $ref: "#/components/schemas/TransactionList"
-        '404':
-          description: No transactions found
-
-    put:
+            $ref: '#/definitions/TransactionsResponse'
+          examples:
+            application/json:
+              transactions:
+                - id: "1"
+                  date: "2024-01-01T09:15:00.123Z"
+                  description: "Transaction description"
+                  amount: 100.50
+                  balance: 1500.20
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/transactions/{accountNumber}/{transactionId}:
+    get:
       tags:
-        - User Module
-      summary: Update a transaction
-      description: Update information about a specific transaction.
+        - Transaction Module
+      summary: Get Transaction Details
+      description: Retrieve details of a specific transaction
       parameters:
-        - name: transactionId
-          in: path
-          description: ID of the transaction to update
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
           required: true
           type: string
-        - name: updatedInfo
-          in: body
-          description: Updated information about the transaction
+        - in: path
+          name: accountNumber
+          description: Account number for which transaction details are requested
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the specific transaction to be requested
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction details retrieved successfully
+          schema:
+            $ref: '#/definitions/TransactionDetailsResponse'
+          examples:
+            application/json:
+              id: "1"
+              date: "2024-01-01T09:15:00.123Z"
+              description: "Transaction description"
+              amount: 100.50
+              balance: 1500.20
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Transaction Module
+      summary: Update Transaction
+      description: Update category and note fields of a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - in: path
+          name: accountNumber
+          description: Account number for which transaction details are requested
+          required: true
+          type: string
+        - in: path
+          name: transactionId
+          description: ID of the specific transaction to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Update transaction attributes
           required: true
           schema:
-            $ref: "#/components/schemas/Transaction"
+            $ref: '#/definitions/TransactionUpdate'
+      produces:
+        - application/json
       responses:
-        '204':
+        '200':
           description: Transaction updated successfully
-        '404':
-          description: Transaction not found
-      security:
-        - Bearer: []
-
-    delete:
-      tags:
-        - User Module
-      summary: Delete a transaction
-      description: Remove a specific transaction from the records.
-      parameters:
-        - name: transactionId
-          in: path
-          description: ID of the transaction to delete
-          required: true
-          type: string
-      responses:
-        '204':
-          description: Transaction deleted successfully
-        '404':
-          description: Transaction not found
-      security:
-        - Bearer: []
-
-  /user/transactions/{transactionId}/category:
-    put:
-      tags:
-        - User Module
-      summary: Add category to transaction
-      description: Add a category to a specific transaction.
-      parameters:
-        - name: transactionId
-          in: path
-          description: ID of the transaction to update
-          required: true
-          type: string
-        - name: category
-          in: body
-          description: Category to be added to the transaction
-          required: true
           schema:
-            type: object
-            properties:
-              category:
-                type: string
-      responses:
-        '204':
-          description: Category added to transaction successfully
+            $ref: '#/definitions/ApiResponse'
+          examples:
+            application/json:
+              status: 200
+              message: "Transaction updated successfully"
+              body:
+                id: "1"
+                date: "2024-01-01T09:15:00.123Z"
+                description: "Updated transaction description"
+                amount: 100.50
+                balance: 1500.20
+        '400':
+          description: Invalid Fields
         '404':
           description: Transaction not found
-      security:
-        - Bearer: []
-
-  /user/transactions/{transactionId}/note:
-    put:
-      tags:
-        - User Module
-      summary: Add note to transaction
-      description: Add a note to a specific transaction.
-      parameters:
-        - name: transactionId
-          in: path
-          description: ID of the transaction to update
-          required: true
-          type: string
-        - name: note
-          in: body
-          description: Note to be added to the transaction
-          required: true
-          schema:
-            type: object
-            properties:
-              note:
-                type: string
-      responses:
-        '204':
-          description: Note added to transaction successfully
-        '404':
-          description: Transaction not found
-      security:
-        - Bearer: []
-
+        '500':
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
-
-components:
-  schemas:
-    TransactionList:
-      type: array
-      items:
-        $ref: "#/components/schemas/Transaction"
-    Transaction:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Transaction ID
-        accountNumber:
-          type: string
-          description: Account number associated with the transaction
-        amount:
-          type: number
-          description: Transaction amount
-        date:
-          type: string
-          format: date
-          description: Transaction date
-        description:
-          type: string
-          description: Transaction description
-        category:  # New property for transaction category
-          type: string
-          description: Transaction category
-        note:  # New property for transaction note
-          type: string
-          description: Transaction note
-        # Add other transaction properties here as needed
+definitions:
+  TransactionsResponse:
+    type: object
+    properties:
+      transactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+        format: date-time
+      description:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: number
+  TransactionDetailsResponse:
+    $ref: '#/definitions/Transaction'
+  TransactionUpdate:
+    type: object
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          date:
+            type: string
+            format: date-time
+          description:
+            type: string
+          amount:
+            type: number
+          balance:
+            type: number
